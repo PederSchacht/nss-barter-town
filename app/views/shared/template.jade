@@ -13,18 +13,32 @@ html(class='no-js', lang='en')
     nav.top-bar
       ul.title-area
         li.name
-          h1: a(href="/") The Title
+          h1: a(href='/')= title
         li.toggle-topbar.menu-icon
-          a(href="#") Menu
+          a(href='#') Menu
 
       section.top-bar-section
         ul.left
+          li.has-form
+            .row.collapse
+              .large-8.small-9.columns
+                input(type='text', placeholder='Find Item')
+              .large-4.small-3.columns
+                a(href='#').button.tiny#searchbutton Search
         ul.right
-          li: a(href="/") Home
+          if user
+            li.active: a(href='/item/new') Add New Item
+          li: a(href='/') Home
           li.divider
-          li: a(href="/") Register
-          li.divider
-          li: a(href="/") Login
+          if user
+            li.has-dropdown.not-click
+              a(href='/')= user ? user.username : 'anon'
+              ul.dropdown
+                li: a(href='/user/:id') My Profile
+                li.divider
+                li.has-form
+                  form(action='/logout', method="post")
+                    button.alert.tiny.radius Logout
     .row
       .small-12.columns
         block content
