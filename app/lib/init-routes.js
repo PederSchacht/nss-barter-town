@@ -19,10 +19,12 @@ function load(app, fn){
 
   app.get('/', d, home.index);
 
-  ////Artists///
-  app.get('/users', d, users.index);
-  app.post('/users', d, users.create);
-  
+  //app.get('/users', d, users.index);
+  //app.post('/users', d, users.create);
+  app.get('/auth', d, users.auth);
+  app.post('/register', d, users.register);
+  app.post('/login', d, users.login);
+  //app.post('/logout', d, users.logout);
   console.log('Routes Loaded');
   fn();
 }

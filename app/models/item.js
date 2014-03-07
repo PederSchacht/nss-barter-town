@@ -10,7 +10,7 @@ function Item(item){
   this.desc = item.desc;
   this.cost = item.cost;
   this.tags = item.tags;
-  this.avaliability = item.avaliability;
+  this.status = 'Available';
 }
 
 Item.prototype.insert = function(fn){
@@ -20,11 +20,37 @@ Item.prototype.insert = function(fn){
   });
 };
 
+Item.prototype.changeStatus = function(){
+  var self = this;
+  if(self.status === 'Available'){
+    self.status = 'Offered';
+  }else{
+    self.status = 'Available';
+  }
+};
+
+Item.prototype.update = function(fn){
+  var self = this;
+  items.update({_id: self._id}, self, function(err, result){
+    fn(result);
+  });
+
+
+};
+
 Item.destroy = function(id, fn){
   var _id = Mongo.ObjectID(id);
 
   items.remove({_id:_id}, function(err, count){
     fn(count);
+  });
+};
+
+Item.findById = function(id, fn){
+  var _id = Mongo.ObjectID(id);
+
+  items.findOne({_id:_id}, function(err, record){
+    fn(record);
   });
 };
 

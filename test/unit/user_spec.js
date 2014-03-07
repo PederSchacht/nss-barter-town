@@ -9,7 +9,7 @@ var exec = require('child_process').exec;
 var Mongo = require('mongodb');
 var fs = require('fs');
 var User;
-//var Item;
+var Item;
 var id;
 
 describe('User', function(){
@@ -19,7 +19,7 @@ describe('User', function(){
     var initMongo = require('../../app/lib/init-mongo');
     initMongo.db(function(){
       User = require('../../app/models/user');
-//      Item = require('../../app/models/item');
+      Item = require('../../app/models/item');
       done();
     });
   });
@@ -38,6 +38,7 @@ describe('User', function(){
         user.hashPassword(function(){
           //user.addPhoto(oldname);
           user.insert(function(){
+            console.log(user._id.toString());
             id = user._id.toString();
             done();
           });
@@ -54,6 +55,7 @@ describe('User', function(){
       expect(u1.password).to.equal('1234');
     });
   });
+
   describe('#hashPassword', function(){
     it('should hash a password with salt', function(done){
       var u1 = new User({email:'bob@aol.com', password:'1234'});
@@ -66,7 +68,8 @@ describe('User', function(){
 
 /*
   describe('#addPhoto', function(){
-    it('should add a photo to User', function(){
+    it('should add a photo to User', function()
+
       expect(user.photo).to.equal('/img/testSue.jpg');
     });
   });
@@ -81,6 +84,7 @@ describe('User', function(){
         });
       });
     });
+
     it('should not insert duplicate user into mongo', function(done){
       var u1 = new User({email:'sue@aol.com', password:'wxyz'});
       u1.hashPassword(function(){
@@ -119,6 +123,42 @@ describe('User', function(){
     it('should not find user - bad password', function(done){
       User.findByEmailAndPassword('sue@aol.com', 'wrong', function(user){
         expect(user).to.be.null;
+        done();
+      });
+    });
+  });
+
+  describe('addItem', function(){
+    it('should add an item to the items array', function(done){
+      var item = new Item({name: 'frog'});
+      item.insert(function(){
+        user.addItem(item._id);
+        expect(item._id).to.be.ok;
+        expect(user.items).to.have.length(1);
+        done();
+      });
+    });
+  });
+
+  describe('removeItem', function(){
+    it('should remove an item from the items array', function(done){
+      var item = new Item({name: 'frog'});
+      item.insert(function(){
+        user.addItem(item._id);
+        user.removeItem(item._id);
+        expect(user.items).to.have.length(0);
+        done();
+      });
+    });
+  });
+
+  describe('winItem', function(){
+    it('should add item to itemsWon Array', function(done){
+      var item = new Item({name: 'frog', year: '1994'});
+      item.insert(function(){
+        user.winItem(item);
+        expect(user.itemsWon).to.have.length(1);
+        expect(user.itemsWon[0]).to.equal('1994 frog');
         done();
       });
     });

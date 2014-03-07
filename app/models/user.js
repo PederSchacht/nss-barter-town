@@ -6,6 +6,7 @@ var path = require('path');
 var bcrypt = require('bcrypt');
 var users = global.nss.db.collection('users');
 var Mongo = require('mongodb');
+var _ = require('lodash');
 
 function User(user){
   this._id = user._id;
@@ -13,6 +14,8 @@ function User(user){
   this.email = user.email;
   this.password = user.password;
   this.photo = user.photo;
+  this.items = user.items || [];
+  this.itemsWon = user.itemsWon || [];
 }
 
 User.prototype.hashPassword = function(fn){
@@ -58,6 +61,7 @@ User.findById = function(id, fn){
     fn(record);
   });
 };
+
 User.findByEmailAndPassword = function(email, password, fn){
   users.findOne({email:email}, function(err, record){
     if(record){
@@ -74,3 +78,15 @@ User.findByEmailAndPassword = function(email, password, fn){
   });
 };
 
+User.prototype.addItem = function(item){
+  this.items.push(item);
+};
+
+User.prototype.removeItem = function(item){
+  _.remove(this.items, function(temp){return temp===item;});
+};
+
+User.prototype.winItem = function(item){
+  var string = item.year+' '+item.name;
+  this.itemsWon.push(string);
+};
