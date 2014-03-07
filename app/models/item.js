@@ -11,6 +11,7 @@ function Item(item){
   this.cost = item.cost;
   this.tags = item.tags;
   this.status = 'Available';
+  this.photos = [];
 }
 
 Item.prototype.insert = function(fn){

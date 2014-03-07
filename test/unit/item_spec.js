@@ -5,7 +5,7 @@ var expect = require('chai').expect;
 var Mongo = require('mongodb');
 var Item, User;
 var sue, bob;
-var items = global.nss.db.collection('items');
+var items;
 
 describe('Item', function(){
 
@@ -14,6 +14,7 @@ describe('Item', function(){
     initMongo.db(function(){
       Item = require('../../app/models/item');
       User = require('../../app/models/user');
+      items = global.nss.db.collection('items');
       done();
     });
   });
