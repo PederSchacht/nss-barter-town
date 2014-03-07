@@ -25,7 +25,7 @@ describe('User', function(){
   });
 
   beforeEach(function(done){
-    var testdir =__dirname + '/../../app/static//test*';
+    var testdir =__dirname + '/../../app/static/img/test*';
     var cmd = 'rm -rf' + testdir;
 
     exec(cmd, function(){
@@ -33,10 +33,10 @@ describe('User', function(){
       var copyfile = __dirname + '/../fixtures/tempPhoto-copy.jpg';
       fs.createReadStream(origfile).pipe(fs.createWriteStream(copyfile));
       global.nss.db.dropDatabase(function(err,result){
-        user = new User({email:'sue@aol.com', password:'abcd'});
-        var oldname = __dirname + '/../fixtures/tempPhoto-copy.jpg';
+        user = new User({name:'testSue', email:'sue@aol.com', password:'abcd'});
+        //var oldname = __dirname + '/../fixtures/tempPhoto-copy.jpg';
         user.hashPassword(function(){
-          user.addPhoto(oldname);
+          //user.addPhoto(oldname);
           user.insert(function(){
             id = user._id.toString();
             done();
@@ -64,12 +64,13 @@ describe('User', function(){
     });
   });
 
+/*
   describe('#addPhoto', function(){
     it('should add a photo to User', function(){
-      expect(user.photo).to.equal('/img/sueTest.jpg');
+      expect(user.photo).to.equal('/img/testSue.jpg');
     });
   });
-
+*/
   describe('#insert', function(){
     it('should insert user into mongo', function(done){
       var u1 = new User({email:'bob@aol.com', password:'1234'});
@@ -90,13 +91,13 @@ describe('User', function(){
       });
     });
   });
-/*
-    describe('findById', function(){
-    it('should find user by her id', function(done){
-      var id = u1._id.toString();
 
-      User.findById(id, function(user){
-        expect(user.id).to.deep.equal(u1.id);
+  describe('findById', function(){
+    it('should find user by her id', function(done){
+      var id = user._id.toString();
+
+      User.findById(id, function(User){
+        expect(User.id).to.deep.equal(user.id);
         done();
       });
     });
@@ -122,6 +123,6 @@ describe('User', function(){
       });
     });
   });
-*/
+
 });
 
