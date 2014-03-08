@@ -44,25 +44,23 @@ Item.prototype.addUser = function(id){
   this.userId = id;
 };
 
-Item.prototype.addBids = function(bids){
-  //bids should be an array of objects
-  //each object has an item id and a user id, both strings
+Item.prototype.addBids = function(ids){
+  //ids should be an array of item ids as strings.
   //put these into the bids array.
   var self = this;
-  _.each(bids, function(bid){
-    self.bids.push(bid);
+  _.each(ids, function(id){
+    self.bids.push(id);
   });
 };
 
-Item.prototype.removeBidsByUser = function(id){
+/*
+Item.prototype.removeBids = function(id){
   //id should be a user's id as a string.
   //remove the bids by the specified user.
   var self = this;
-  self.bids = _.reject(self.bids, function(bid){
-    console.log('Item removeBidsByUser: ', self, bid);
-    return bid.userId === id;
-  });
+
 };
+*/
 
 Item.destroy = function(id, fn){
   var _id = Mongo.ObjectID(id);

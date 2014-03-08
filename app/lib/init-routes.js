@@ -15,7 +15,7 @@ module.exports = function(req, res, next){
 function load(app, fn){
   var home = require('../routes/home');
   var users = require('../routes/users');
-//  var items = require('../routes/items');
+  var items = require('../routes/items');
 
   app.get('/', d, home.index);
 
@@ -23,6 +23,10 @@ function load(app, fn){
   app.post('/register', d, users.register);
   app.post('/login', d, users.login);
   app.post('/logout', d, users.logout);
+
+  app.get('/items', d, items.index);
+  app.post('/items', d, items.create);
+  app.put('/items', d, items.update);
   console.log('Routes Loaded');
   fn();
 }

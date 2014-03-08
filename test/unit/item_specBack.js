@@ -147,42 +147,35 @@ describe('Item', function(){
       var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
       var item2 = new Item({name:'Used Socks', year:'1981', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
       var item3 = new Item({name:'Van Halen Cassette', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
-      users.findOne({name: 'Sue'}, function(err, record){
-        var userId1 = record._id.toString();
-        item1.addUser(userId1);
-        item1.insert(function(records1){
-          users.findOne({name: 'Bob'}, function(err, record2){
-            var userId2 = record2._id.toString();
-            item2.addUser(userId2);
-            item2.insert(function(records2){
-              var bids = [{itemId: item1._id.toString(), userId: userId1}, {itemId: item2._id.toString(), userId: userId2}];
-              item3.addBids(bids);
-              expect(item3.bids).to.deep.equal(bids);
-              done();
-            });
-          });
+      item1.insert(function(records1){
+        item2.insert(function(records2){
+          var ids = [item1._id.toString(), item2._id.toString()];
+          item3.addBids(ids);
+          expect(item3.bids).to.deep.equal(ids);
+          done();
         });
       });
     });
   });
 
-  describe('#removeBidsByUser', function(){
+/*
+  describe('#removeBids', function(){
     it('should remove bids by a specified user from the item', function(done){
       var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
       var item2 = new Item({name:'Used Socks', year:'1981', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
       var item3 = new Item({name:'Van Halen Cassette', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
       users.findOne({name: 'Sue'}, function(err, record){
-        var userId1 = record._id.toString();
-        item1.addUser(userId1);
+        var id1 = record._id.toString();
+        item1.addUser(id1);
         item1.insert(function(records1){
           users.findOne({name: 'Bob'}, function(err, record2){
-            var userId2 = record2._id.toString();
-            item2.addUser(userId2);
+            var id2 = record2._id.toString();
+            item2.addUser(id2);
             item2.insert(function(records2){
-              var bids = [{itemId: item1._id.toString(), userId: item1.userId}, {itemId: item2._id.toString(), userId: item2.userId}];
-              item3.addBids(bids);
-              item3.removeBidsByUser(userId2);
-              expect(item3.bids).to.deep.equal([{itemId: item1._id.toString(), userId: userId1}]);
+              var ids = [item1._id.toString(), item2._id.toString()];
+              item3.addBids(ids);
+              item3.removeBids(id2);
+              expect(item3.bids).to.deep.equal([item1._id.toString()]);
               done();
             });
           });
@@ -190,6 +183,7 @@ describe('Item', function(){
       });
     });
   });
+*/
 
 
 });
