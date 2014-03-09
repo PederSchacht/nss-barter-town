@@ -94,27 +94,34 @@ exports.placeBid = function(req, res){
 };
 
 exports.winBid = function(req, res){
-  Item.findById(req.body.item1, function(item1){
-    item1 = new Item(item1);
-    Item.findById(req.body.item2, function(item2){
-      item2 = new Item(item2);
-      User.findById(req.body.user1, function(user1){
-        user1 = new User(user1);
-        User.findById(req.body.user2, function(user2){
-          user2 = new User(user2);
+  Item.findById(req.body.origItem, function(origItem){
+    origItem = new Item(origItem);
+    Item.findById(req.body.bidItem, function(bidItem){
+      bidItem = new Item(bidItem);
+      User.findById(req.body.origUser, function(origUser){
+        origUser = new User(origUser);
+        User.findById(bidItem.userId, function(bidUser){
+          bidUser = new User(bidUser);
+          var origPhotos = req.body.origPhotos;
+          var bidPhotos = bidItem.photos;
 
-          user1.winItem(item2);
-          user2.winItem(item1);
-          user1.removeItem(item1);
-          user2.removeItem(item2);
-          item1.userId = user2._id.toString();
-          item2.userId = user1._id.toString();
-          item1.bids = [];
-          item2.bids = [];
-          item1.update(function(i1){
-            item2.update(function(i2){
-              user1.update(function(u1){
-                user2.update(function(u2){
+          origItem.bids = [];
+          bidItem.bids = [];
+          origItem.userId = bidUser._id.toString();
+          bidItem.userId = origUser._id.toString();
+          origUser.winItem(bidItem);
+          bidUser.winItem(origItem);
+          origUser.addItem(bidItem);
+          bidUser.addItem(origItem);
+          origUser.removeItem(origItem._id);
+          bidUser.removeItem(bidItem._id);
+          origItem.photos = origPhotos;
+          bidItem.photos = bidPhotos;
+
+          origItem.update(function(i1){
+            bidItem.update(function(i2){
+              origUser.update(function(u1){
+                bidUser.update(function(u2){
                   //emails
                   res.redirect('/');
                 });

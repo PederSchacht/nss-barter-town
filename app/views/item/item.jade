@@ -27,15 +27,15 @@ block content
                   legend Pick a Winner
                   .row
                     .small-6.columns
-                      Select(name='item2')
+                      Select(name='bidItem')
                         for bid in item.bids
                           option(value=bid._id, selected='true')= bid.name
                         else
                           option(selected='true') No Bids
                     .small-6.columns
-                          input(name='item1', value=item._id, type='hidden')
-                          input(name='user1', value=item.userId, type='hidden')
-                          input(name='user2', value=userId, type='hidden')
+                          input(name='origUser', value=item.userId, type='hidden')
+                          input(name='origItem', value=item._id, type='hidden')
+                          input(name='origPhotos', value=item.photos, type='hidden')
                           button Pick Winner
           else
             #placeBid

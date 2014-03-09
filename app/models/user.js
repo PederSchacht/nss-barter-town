@@ -66,7 +66,7 @@ User.prototype.addPhoto = function(oldname, fn){
 };
 
 User.findById = function(id, fn){
-  var _id = Mongo.ObjectID(id);
+  var _id = Mongo.ObjectID(id.toString());
 
   users.findOne({_id:_id}, function(err, record){
     fn(record);
@@ -93,8 +93,8 @@ User.prototype.addItem = function(item){
   this.items.push(item);
 };
 
-User.prototype.removeItem = function(item){
-  _.remove(this.items, function(temp){return temp===item;});
+User.prototype.removeItem = function(itemId){
+  _.remove(this.items, function(temp){return temp._id.toString()===itemId.toString();});
 };
 
 User.prototype.winItem = function(item){

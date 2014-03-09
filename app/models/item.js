@@ -14,9 +14,9 @@ function Item(item){
   this.cost = item.cost;
   this.tags = item.tags;
   this.status = 'Available';
-  this.photos = [];
+  this.photos = item.photos || [];
   this.userId = item.userId;
-  this.bids = [];
+  this.bids = item.bids || [];
   this._id = item._id;
 }
 
@@ -36,6 +36,7 @@ Item.prototype.changeStatus = function(){
   }
 };
 
+
 Item.prototype.update = function(fn){
   var self = this;
   items.update({_id: self._id}, self, function(err, result){
@@ -43,11 +44,25 @@ Item.prototype.update = function(fn){
   });
 };
 
+/*
+Item.prototype.save = function(fn){
+  var self = this;
+  items.save({_id:(self._id),
+             userName:(self.userName),
+             email:(self.email),
+             password:(self.password),
+             photo:(self.photo),
+             items:(self.items),
+             itemsWon:(self.itemsWon)
+  });
+};
+*/
+
 Item.prototype.addUser = function(id){
   this.userId = id;
 };
 
-/*
+
 Item.prototype.addBids = function(bids){
   //bids should be an array of objects
   //each object has an item id and a user id, both strings
@@ -57,7 +72,7 @@ Item.prototype.addBids = function(bids){
     self.bids.push(bid);
   });
 };
-*/
+
 
 Item.prototype.addBid = function(bid){
   var self = this;

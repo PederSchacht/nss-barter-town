@@ -1,7 +1,7 @@
 'use strict';
 
 var User = require('../models/user');
-var request = require('request');
+//var request = require('request');
 
 exports.auth = function(req, res){
   res.render('users/auth', {title: 'User Authentication'});
@@ -76,6 +76,7 @@ exports.editProfile = function(req, res){
   });
 };
 
+/*
 exports.email = function(req, res){
   var key = process.env.MAILGUN;
   var id = req.session.userId;
@@ -93,7 +94,7 @@ exports.email = function(req, res){
   //form.append('html', req.body.body);
   //form.append('attachment', fs.createReadStream(__dirname + '/../static/img/acadia.jpg'));
 };
-
+*/
 
 
 
