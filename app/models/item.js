@@ -15,7 +15,7 @@ function Item(item){
   this.tags = item.tags;
   this.status = 'Available';
   this.photos = [];
-  this.userId = '';
+  this.userId = item.userId;
   this.bids = [];
   this._id = item._id;
 }

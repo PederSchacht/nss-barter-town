@@ -3,11 +3,14 @@
 var Item = require('../models/item');
 
 exports.create = function(req, res){
-  req.body.userId = req.session.userId;
+  req.body.userId = (req.session.userId).toString();
   var item  = new Item(req.body);
-  item.insert(function(){
-    //res.redirect('/items');
-    res.send({item:item});
+  console.log('THIS IS THE REQ: ', req.files);
+  item.addPhoto(req.files.photos.path, function(){
+    item.insert(function(){
+      //res.redirect('/items');
+      res.send({item:item});
+    });
   });
 };
 

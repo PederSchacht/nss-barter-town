@@ -53,7 +53,7 @@ block content
               h1 Item List
               each item in items
                 .item
-                  .thumbnail= item.photos
+                  .thumbnail(style='background-image:url("' + item.photos +'")')
                   a(href='/items/' + item._id)= item.name
 
 
