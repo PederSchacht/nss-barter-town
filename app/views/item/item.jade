@@ -1,0 +1,9 @@
+extends ../shared/template
+
+block content
+  h1= item.name
+  h2= item.cost
+  h2= item.year
+  .photo(style='background-image:url("'+item.photo+'")')
+  h2= item.desc
+  h2= item.tags

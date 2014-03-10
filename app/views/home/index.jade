@@ -19,7 +19,7 @@ block content
               .small-6.columns
                 button.tiny.radius Register
 
-      .small-6.columns
+     .small-6.columns
         form(action='/login', method='post')
           fieldset
             legend Login
@@ -36,7 +36,24 @@ block content
                 button.tiny.radius Login
   .row
     .small-12.columns
-      #items-list
-        h1 Item List
+      .row
+        .small-6.columns
+          #user-info
+            .photo= user.photo
+            h1= user.email
+          #user-items
+            h1 User Items
+            each item in userItems
+              .item
+                .thumbnail= item.photos
+                a(href='/items/' + item._id)= item.name
+        .small-6.columns
+          #items-list
+            h1 Item List
+            each item in items
+              .item
+                .thumbnail= item.photos
+                a(href='/items/' + item._id)= item.name
+
 
 

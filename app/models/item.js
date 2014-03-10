@@ -4,6 +4,8 @@ module.exports = Item;
 var items = global.nss.db.collection('items');
 var Mongo = require('mongodb');
 var _ = require('lodash');
+var fs = require('fs');
+var path = require('path');
 
 function Item(item){
   this.name = item.name;
@@ -15,6 +17,7 @@ function Item(item){
   this.photos = [];
   this.userId = '';
   this.bids = [];
+  this._id = item._id;
 }
 
 Item.prototype.insert = function(fn){
@@ -59,8 +62,32 @@ Item.prototype.removeBidsByUser = function(id){
   //remove the bids by the specified user.
   var self = this;
   self.bids = _.reject(self.bids, function(bid){
-    console.log('Item removeBidsByUser: ', self, bid);
     return bid.userId === id;
+  });
+};
+
+Item.prototype.addPhoto = function(oldname, fn){
+  var self = this;
+  var extension = path.extname(oldname);
+  var itemName = this.name.replace(/\s/g, '').toLowerCase();
+  var year = this.year;
+  var absolutePath = __dirname + '/../static';
+  var pathImgBarter = absolutePath + '/img/' + 'barter/';
+  var pathImgBarterItem = pathImgBarter + itemName + '/';
+  var pathImgBarterItemYear = pathImgBarterItem + year + '/';
+  
+  var relativePath = '/img/' + 'barter/' + itemName + '/' + year + '/' + this.photos.length + extension;
+
+  fs.mkdir(pathImgBarter, function(){
+    fs.mkdir(pathImgBarterItem, function(){
+      fs.mkdir(pathImgBarterItemYear, function(){
+        //console.log('Item addPhoto: ', oldname, absolutePath, absolutePath + relativePath);
+        fs.rename(oldname, absolutePath + relativePath, function(err){
+          self.photos.push(relativePath);
+          fn(err);
+        });
+      });
+    });
   });
 };
 
@@ -82,6 +109,38 @@ Item.findById = function(id, fn){
 
 Item.findAll = function(fn){
   items.find().toArray(function(err, records){
+    fn(records);
+  });
+};
+
+Item.findByTag = function(tag, fn){
+  items.find().toArray(function(err, records){
+    var results = [];
+    _.each(records, function(record){
+      _.each(record.tags, function(oneTag){
+        if(oneTag === tag){
+          results.push(record);
+        }
+      });
+    });
+    fn(results);
+  });
+};
+
+Item.findByYear = function(year, fn){
+  items.find({year:year}).toArray(function(err, records){
+    fn(records);
+  });
+};
+
+Item.findByName = function(name, fn){
+  items.find({name:name}).toArray(function(err, records){
+    fn(records);
+  });
+};
+
+Item.findByUser = function(userId, fn){
+  items.find({userId: userId}).toArray(function(err, records){
     fn(records);
   });
 };

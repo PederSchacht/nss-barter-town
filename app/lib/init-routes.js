@@ -18,15 +18,19 @@ function load(app, fn){
   var items = require('../routes/items');
 
   app.get('/', d, home.index);
+  app.get('/new', d, home.newItem);
 
   app.get('/auth', d, users.auth);
   app.post('/register', d, users.register);
   app.post('/login', d, users.login);
   app.post('/logout', d, users.logout);
+  app.get('/profile', d, users.profile);
 
+  app.get('/items/:id', d, items.showItem);
   app.get('/items', d, items.index);
   app.post('/items', d, items.create);
   app.put('/items', d, items.update);
+  app.post('/filter', d, items.filter);
   console.log('Routes Loaded');
   fn();
 }

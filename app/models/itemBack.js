@@ -15,6 +15,7 @@ function Item(item){
   this.photos = [];
   this.userId = '';
   this.bids = [];
+  this._id = item._id;
 }
 
 Item.prototype.insert = function(fn){
@@ -44,23 +45,24 @@ Item.prototype.addUser = function(id){
   this.userId = id;
 };
 
-Item.prototype.addBids = function(ids){
-  //ids should be an array of item ids as strings.
+Item.prototype.addBids = function(bids){
+  //bids should be an array of objects
+  //each object has an item id and a user id, both strings
   //put these into the bids array.
   var self = this;
-  _.each(ids, function(id){
-    self.bids.push(id);
+  _.each(bids, function(bid){
+    self.bids.push(bid);
   });
 };
 
-/*
-Item.prototype.removeBids = function(id){
+Item.prototype.removeBidsByUser = function(id){
   //id should be a user's id as a string.
   //remove the bids by the specified user.
   var self = this;
-
+  self.bids = _.reject(self.bids, function(bid){
+    return bid.userId === id;
+  });
 };
-*/
 
 Item.destroy = function(id, fn){
   var _id = Mongo.ObjectID(id);
@@ -80,6 +82,38 @@ Item.findById = function(id, fn){
 
 Item.findAll = function(fn){
   items.find().toArray(function(err, records){
+    fn(records);
+  });
+};
+
+Item.findByTag = function(tag, fn){
+  items.find().toArray(function(err, records){
+    var results = [];
+    _.each(records, function(record){
+      _.each(record.tags, function(oneTag){
+        if(oneTag === tag){
+          results.push(record);
+        }
+      });
+    });
+    fn(results);
+  });
+};
+
+Item.findByYear = function(year, fn){
+  items.find({year:year}).toArray(function(err, records){
+    fn(records);
+  });
+};
+
+Item.findByName = function(name, fn){
+  items.find({name:name}).toArray(function(err, records){
+    fn(records);
+  });
+};
+
+Item.findByUser = function(userId, fn){
+  items.find({userId: userId}).toArray(function(err, records){
     fn(records);
   });
 };

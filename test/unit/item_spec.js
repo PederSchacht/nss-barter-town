@@ -7,6 +7,8 @@ var Item, User;
 var sue, bob;
 var items;
 var users;
+var fs = require('fs');
+var exec = require('child_process').exec;
 
 describe('Item', function(){
 
@@ -22,20 +24,36 @@ describe('Item', function(){
   });
 
   beforeEach(function(done){
-    global.nss.db.dropDatabase(function(err, result){
-      bob = new User({email:'bob@aol.com', password:'1234', name: 'Bob'});
-      sue = new User({email:'sue@aol.com', password:'abcd', name: 'Sue'});
-      sue.hashPassword(function(){
-        sue.insert(function(){
-          bob.hashPassword(function(){
-            bob.insert(function(){
-              done();
+    var testdir = __dirname + '/../../app/static/img/barter';
+    var cmd = 'rm -rf ' + testdir;
+    exec(cmd, function(){
+      var origfile1 = __dirname + '/../fixtures/mustang.jpg';
+      var origfile2 = __dirname + '/../fixtures/mustang2.jpg';
+      var copyfile1 = __dirname + '/../fixtures/mustang-copy.jpg';
+      var copy2file1 = __dirname + '/../fixtures/mustang-copy2.jpg';
+      var copyfile2 = __dirname + '/../fixtures/mustang2-copy.jpg';
+      var copy2file2 = __dirname + '/../fixtures/mustang2-copy2.jpg';
+      fs.createReadStream(origfile1).pipe(fs.createWriteStream(copyfile1));
+      fs.createReadStream(origfile1).pipe(fs.createWriteStream(copy2file1));
+      fs.createReadStream(origfile2).pipe(fs.createWriteStream(copyfile2));
+      fs.createReadStream(origfile2).pipe(fs.createWriteStream(copy2file2));
+
+      global.nss.db.dropDatabase(function(err, result){
+        bob = new User({email:'bob@aol.com', password:'1234', name: 'Bob'});
+        sue = new User({email:'sue@aol.com', password:'abcd', name: 'Sue'});
+        sue.hashPassword(function(){
+          sue.insert(function(){
+            bob.hashPassword(function(){
+              bob.insert(function(){
+                done();
+              });
             });
           });
         });
       });
     });
   });
+
 
   describe('new', function(){
     it('should create a new Item object', function(){
@@ -191,6 +209,135 @@ describe('Item', function(){
     });
   });
 
+  describe('findById', function(){
+    it('should find an item by its Id.', function(done){
+      var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
+      var item2 = new Item({name:'Used Socks', year:'1981', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
+      var item3 = new Item({name:'Van Halen Cassette', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
+      item1.insert(function(){
+        item2.insert(function(){
+          item3.insert(function(){
+            Item.findById(item1._id.toString(), function(record){
+              expect(record.name).to.equal('Ford Mustang');
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
 
+  describe('findAll', function(){
+    it('should find all items.', function(done){
+      var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
+      var item2 = new Item({name:'Used Socks', year:'1981', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
+      var item3 = new Item({name:'Van Halen Cassette', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
+      item1.insert(function(){
+        item2.insert(function(){
+          item3.insert(function(){
+            Item.findAll(function(records){
+              expect(records.length).to.equal(3);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('findByTag', function(){
+    it('should find items with a given tag.', function(done){
+      var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
+      var item2 = new Item({name:'Used Socks', year:'1981', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
+      var item3 = new Item({name:'Van Halen Cassette', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
+      item1.insert(function(){
+        item2.insert(function(){
+          item3.insert(function(){
+            Item.findByTag('smells', function(records){
+              expect(records.length).to.equal(2);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('findByYear', function(){
+    it('should find items with a given year.', function(done){
+      var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
+      var item2 = new Item({name:'Used Socks', year:'1984', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
+      var item3 = new Item({name:'Van Halen Cassette', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
+      item1.insert(function(){
+        item2.insert(function(){
+          item3.insert(function(){
+            Item.findByYear('1984', function(records){
+              expect(records.length).to.equal(2);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('findByUser', function(){
+    it('should find items with a given user.', function(done){
+      var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
+      var item2 = new Item({name:'Used Socks', year:'1984', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
+      var item3 = new Item({name:'Van Halen Cassette', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
+
+      users.findOne({name: 'Bob'}, function(err, record){
+        var userId = record._id.toString();
+        item1.addUser(userId);
+        item1.insert(function(){
+          item2.insert(function(){
+            item3.insert(function(){
+              Item.findByUser(userId, function(records){
+                expect(records[0].name).to.equal('Ford Mustang');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('findByName', function(){
+    it('should find items with a given name.', function(done){
+      var item1 = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
+      var item2 = new Item({name:'Used Socks', year:'1984', desc:'My nasty-ass gym socks', cost:'100', tags:['foot apparell', 'smells'], status:'Available'});
+      var item3 = new Item({name:'Ford Mustang', year:'1984', desc:'Heavily worn-out cassete.', cost:'200', tags:['80s rock', 'smells'], status:'Available'});
+      item1.insert(function(){
+        item2.insert(function(){
+          item3.insert(function(){
+            Item.findByName('Ford Mustang', function(records){
+              expect(records.length).to.equal(2);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('addPhoto', function(){
+    it('should add a photo to the items photos array.', function(done){
+      var oldname1 = __dirname + '/../fixtures/mustang-copy.jpg';
+      var oldname2 = __dirname + '/../fixtures/mustang2-copy.jpg';
+      var item = new Item({name:'Ford Mustang', year:'1967', desc:'Fast Classic Car', cost:'15000', tags:['car', 'red'], status:'Available'});
+      users.findOne({name: 'Sue'}, function(err, record){
+        var userId1 = record._id.toString();
+        item.addUser(userId1);
+        item.addPhoto(oldname1, function(){
+          item.addPhoto(oldname2, function(){
+            expect(item.photos).to.deep.equal(['/img/barter/fordmustang/1967/0.jpg', '/img/barter/fordmustang/1967/1.jpg']);
+            done();
+          });
+        });
+      });
+    });
+  });
 });
 

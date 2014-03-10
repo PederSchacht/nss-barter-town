@@ -44,3 +44,9 @@ exports.logout = function(req, res){
   });
 };
 
+exports.profile = function(req, res){
+  var id = req.session.userId;
+  User.findById(id, function(user){
+    res.render('users/profile', {title:user.email, user:user});
+  });
+};

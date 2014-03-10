@@ -1,0 +1,32 @@
+extends ../shared/template
+
+block content
+  h1= title
+  .row
+    .small-6.columns
+      form(action='/items', method='post')
+        fieldset
+          legend New Item
+          .row
+            .small-12.columns
+              .row
+                .small-6.columns
+                  label Year
+                  input(name='year', type='text', placeholder='2000')
+                  label Cost
+                  input(name='cost', type='text', placeholder='$100')
+                .small-6.columns
+                  label Name
+                  input(name='name', type='text', placeholder='Mustang')
+                  label Tags
+                  input(name='tags', type='text', placeholder='e.g. red, auto, muscle car')
+              label Description
+              input(name='desc', type='text', placeholder='Super fast!')
+              .row
+                .small-6.columns
+                  label Photo
+                  input(name='photos', type='file')
+                .small-6.columns
+                  button.small.radius Submit
+
+    .small-6.columns
