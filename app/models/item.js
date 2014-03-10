@@ -65,7 +65,9 @@ Item.prototype.addBid = function(bid){
   tempBid.name = bid.name;
   tempBid._id = bid._id;
   tempBid.userId = bid.userId;
-  self.bids.push(tempBid);
+  var tempBids = self.bids;
+  tempBids.push(tempBid);
+  self.bids = tempBids;
 };
 
 Item.prototype.removeBidsByUser = function(id){

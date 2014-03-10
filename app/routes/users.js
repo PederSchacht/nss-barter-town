@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('../models/user');
+var request = require('request');
 
 exports.auth = function(req, res){
   res.render('users/auth', {title: 'User Authentication'});
@@ -8,14 +9,15 @@ exports.auth = function(req, res){
 
 exports.register = function(req, res){
   var user = new User(req.body);
-  user.addPhoto(req.files.photo.path);
-  user.hashPassword(function(){
-    user.insert(function(){
-      if(user._id){
-        res.redirect('/');
-      }else{
-        res.render('users/auth', {title: 'User Authentication'});
-      }
+  user.addPhoto(req.files.photos.path, function(){
+    user.hashPassword(function(){
+      user.insert(function(){
+        if(user._id){
+          res.redirect('/');
+        }else{
+          res.render('users/auth', {title: 'User Authentication'});
+        }
+      });
     });
   });
 };
@@ -51,7 +53,6 @@ exports.profile = function(req, res){
 };
 
 exports.editProfile = function(req, res){
-  console.log('USERS EXPORTS EDIT PROFILE REQ SESSION: ', req.session);
   var id = req.session.userId;
   User.findById(id, function(user){
     var u1 = new User(user);
@@ -77,15 +78,18 @@ exports.editProfile = function(req, res){
 
 exports.email = function(req, res){
   var key = process.env.MAILGUN;
+  var id = req.session.userId;
   var url = 'https://api:' + key + '@api.mailgun.net/v2/sandbox57340.mailgun.org/messages';
   var post = request.post(url, function(err, response, body){
     res.redirect('/');
   });
   var form = post.form();
-  form.append('from', 'myAss@yourMom.com');
-  form.append('to', req.body.to);
-  form.append('subject', req.body.subject);
-  form.append('text', req.body.body);
+  User.findById(id, function(user){
+    form.append('from', 'myAss@yourMom.com');
+    form.append('to', user.email);
+    form.append('subject', 'Your Barter Town Account');
+    form.append('text', 'Hey you clicked some stuff on Barter Town. Whassssuuuuppppp????!!!!!!');
+  });
   //form.append('html', req.body.body);
   //form.append('attachment', fs.createReadStream(__dirname + '/../static/img/acadia.jpg'));
 };

@@ -22,7 +22,7 @@ block content
             .row
               .small-12.columns
                 label User Photo
-                input(name='photo', type='file', required=true)
+                input(name='photos', type='file', required=true)
             .row
               .small-12.columns
                 button.small.radius Register
@@ -55,14 +55,12 @@ block content
               each item in userItems
                 .item
                   .thumbnail(style='background-image:url("' + item.photos +'")')
-                    .footer
-                      a(href='/items/' + item._id)= item.name
+                  .footer: a(href='/items/' + item._id)= item.name
           .small-5.columns
             #items-list
               h2 Avaliable Items
               each item in items
                 .item
                   .thumbnail(style='background-image:url("' + item.photos +'")')
-                    .footer
-                      a(href='/items/' + item._id)= item.name
+                  .footer: a(href='/items/' + item._id)= item.name
 

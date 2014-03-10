@@ -17,19 +17,24 @@ block content
               td= item.cost
               td= item.desc
               td= item.tags
-
+        form
+          fieldset
+            legend Edit item
+              .row
+                .small-12.columns
+                  button Edit item
         .small-6.columns
           if item.userId === userId
             #pickBid
               h1 Pick a Winner
-              form(action='/win', method='post')
+              form //(action='/win', method='post')
                 fieldset
                   legend Pick a Winner
                   .row
                     .small-6.columns
-                      Select(name='item2')
+                      Select#myBids
                         for bid in item.bids
-                          option(value=bid._id, selected='true')= bid.name
+                          option(name='item2', value=bid._id, selected='true')= bid.name
                         else
                           option(selected='true') No Bids
                     .small-6.columns
@@ -37,20 +42,6 @@ block content
                           input(name='user1', value=item.userId, type='hidden')
                           input(name='user2', value=userId, type='hidden')
                           button Pick Winner
-          else
-            #placeBid
-              h1 Place Bid
-              form(action='/place', method='post', enctype='multipart/form-data')
-                fieldset
-                  legend Place Bid
-                  .row
-                    .small-6.columns
-                      Select(name='item2')
-                        for bid in user.items
-                          option(value=bid._id, selected='true')= bid.name
-                        else
-                          option(selected='true') My Items
-                    .small-6.columns
                       a.button.tiny(href='/new') Add Item
                       input(name='item1', value=item._id, type='hidden')
                       input(name='user1', value=item.userId, type='hidden')

@@ -13,8 +13,8 @@ exports.create = function(req, res){
         var user = new User(theUser);
         user.addItem(item);
         user.update(function(err, result){
-          //res.redirect('/items');
-          res.send({item:item});
+          res.redirect('/items/'+item._id);
+          //res.send({item:item});
         });
       });
     });
@@ -32,7 +32,7 @@ exports.showItem = function(req, res){
   var userId = req.session.userId;
   Item.findById(req.params.id, function(item){
     User.findById(userId, function(user){
-      res.render('item/item', {item:item, user:user, userId:userId});
+      res.render('item/item', {title:item.name, item:item, user:user, userId:userId});
     });
   });
 };
@@ -83,11 +83,11 @@ exports.placeBid = function(req, res){
     item1 = new Item(item1);
     Item.findById(req.body.item2, function(item2){
       item2 = new Item(item2);
+      item1.photos = req.body.photos;
 
       item1.addBid(item2);
       item1.update(function(i1){
         res.redirect('/items/'+item1._id);
-        //done
       });
     });
   });
@@ -97,7 +97,7 @@ exports.winBid = function(req, res){
   Item.findById(req.body.item1, function(item1){
     item1 = new Item(item1);
     Item.findById(req.body.item2, function(item2){
-      item1 = new Item(item2);
+      item2 = new Item(item2);
       User.findById(req.body.user1, function(user1){
         user1 = new User(user1);
         User.findById(req.body.user2, function(user2){
@@ -107,8 +107,8 @@ exports.winBid = function(req, res){
           user2.winItem(item1);
           user1.removeItem(item1);
           user2.removeItem(item2);
-          item1.userId = user2._id;
-          item2.userId = user1._id;
+          item1.userId = user2._id.toString();
+          item2.userId = user1._id.toString();
           item1.bids = [];
           item2.bids = [];
           item1.update(function(i1){
@@ -116,6 +116,7 @@ exports.winBid = function(req, res){
               user1.update(function(u1){
                 user2.update(function(u2){
                   //emails
+                  res.redirect('/');
                 });
               });
             });
