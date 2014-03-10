@@ -3,3 +3,31 @@ extends ../shared/template
 block content
   h1= user.name
   h1= title
+  .row
+    .small-8.columns
+      form(action='/profile', method='post', enctype='multipart/form-data')
+        fieldset
+          legend User info
+          input(type='hidden', name='_method', value='put')
+          .row
+            .small-12.columns
+              .row
+                .small-6.columns
+                  label Name
+                  input(name='userName', type='text', value= user.userName)
+                .small-6.columns
+                  label Email
+                  input(name='email', type='text', value= user.email)
+              .row
+                .small-6.columns
+                  label Photo
+                  input(name='photo', type='file')
+                .small-6.columns
+                  button.small.radius Submit
+    .small-4.columns
+  .row
+    .small-6.columns
+      h1 items array
+    .small-6.columns
+      h1 items won array
+

@@ -21,7 +21,7 @@ html(class='no-js', lang='en')
         ul.left
           li.has-form
             .row.collapse
-              //form(action='/filter', method='post')
+              form(action='/filter', method='get')
               .large-3.small-3.columns
                  select.button.prefix.tiny#selectSearch
                    option Search by:
@@ -34,18 +34,18 @@ html(class='no-js', lang='en')
                 a(href='#').button.postfix.tiny#searchButton Search
         ul.right
           if user
-            li.active: a(href='/new') Add New Item
+            li.active: a(href='/new').button.tiny.btn Add New Item
           li: a(href='/') Home
           li.divider
           if user
             li.has-dropdown.not-click
-              a(href='/')= user ? user.username : 'anon'
+              a(href='/')= user ? user.email : 'anon'
               ul.dropdown
-                li: a(href='/profile') My Profile
+                li: a(href='/profile') Edit Profile
                 li.divider
                 li.has-form
                   form(action='/logout', method="post")
-                    button.alert.tiny.radius Logout
+                    button.alert.tiny.radius.expand Logout
     .row
       .small-12.columns
         block content

@@ -1,9 +1,67 @@
 extends ../shared/template
 
 block content
-  h1= item.name
-  h2= item.cost
-  h2= item.year
-  .photo(style='background-image:url("'+item.photo+'")')
-  h2= item.desc
-  h2= item.tags
+  .row
+    .small-12.columns
+        .small-6.columns
+          h1= item.name
+          .photo(style='background-image:url("' + item.photos +'")')
+          table
+            thead
+              th Year
+              th Cost
+              th Info
+              th Tags
+            tr
+              td= item.year
+              td= item.cost
+              td= item.desc
+              td= item.tags
+
+        .small-6.columns
+          if item.userId === userId
+            #pickBid
+              h1 Pick a Winner
+              form //(action='/win', method='post')
+                fieldset
+                  legend Pick a Winner
+                  .row
+                    .small-6.columns
+                      Select#myBids
+                        for bid in item.bids
+                          option(name='item2', value=bid._id, selected='true')= bid.name
+                        else
+                          option(selected='true') No Bids
+                    .small-6.columns
+                          input(name='item1', value=item._id, type='hidden')
+                          input(name='user1', value=item.userId, type='hidden')
+                          input(name='user2', value=userId, type='hidden')
+                          button Pick Winner
+          else
+            #placeBid
+              h1 Place Bid
+              form(action='/place', method='post')
+                fieldset
+                  legend Place Bid
+                  .row
+                    .small-6.columns
+                      Select#myItems
+                        for bid in user.items
+                          option(name='item2', value=bid._id, selected='true')= bid.name
+                        else
+                          option(selected='true') My Items
+                    .small-6.columns
+                      a.button.tiny(href='/new') Add Item
+                      input(name='item1', value=item._id, type='hidden')
+                      input(name='user1', value=item.userId, type='hidden')
+                      input(name='user2', value=userId, type='hidden')
+                  .row
+                    .small-12.columns
+                          button Place Bid!
+  .row
+    .small-12.columns
+      h1 Current Bids
+        for bid in item.bids
+          li= bid
+        else
+          li No bids yet!

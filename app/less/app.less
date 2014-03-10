@@ -1,15 +1,46 @@
 @bg-color: #9FC2D4;
+@import url(http://fonts.googleapis.com/css?family=Monofett);
+
 
 body{
-  background-color: @bg-color;
+  background-size: contain;
+  background-attachment: fixed;
+  /* IE10 Consumer Preview */ 
+  background-image: -ms-radial-gradient(center top, circle closest-corner, #FFFFFF 0%, #00A3EF 100%);
+
+  /* Mozilla Firefox */ 
+  background-image: -moz-radial-gradient(center top, circle closest-corner, #FFFFFF 0%, #00A3EF 100%);
+
+  /* Opera */ 
+  background-image: -o-radial-gradient(center top, circle closest-corner, #FFFFFF 0%, #00A3EF 100%);
+
+  /* Webkit (Safari/Chrome 10) */ 
+  background-image: -webkit-gradient(radial, center top, 0, center top, 477, color-stop(0, #FFFFFF), color-stop(1, #00A3EF));
+
+  /* Webkit (Chrome 11+) */ 
+  background-image: -webkit-radial-gradient(center top, circle closest-corner, #FFFFFF 0%, #00A3EF 100%);
+
+  /* W3C Markup, IE10 Release Preview */ 
+  background-image: radial-gradient(circle closest-corner at center top, #FFFFFF 0%, #00A3EF 100%);
+}
+
+h2{
+
 }
 
 .top-bar input{
   height: 30px;
 }
+.btn{
+  border-radius: 5px;
+  height: 30px;
+  line-height: 9px;
+  width: 100%;
 
+}
 #searchButton{
   height: 30px;
+  line-height: 33px;
   width: 100%;
   border-top-right-radius:5px;
   border-bottom-right-radius:5px;
@@ -20,21 +51,46 @@ body{
   width: 100%;
   border-top-left-radius:5px;
   border-bottom-left-radius:5px;
+  padding-left: 5%;
 
 }
 
 .photo{
-  width: 150px;
-  height: 150px;
-  border: 2px solid white;
+  width: 200px;
+  height: 200px;
   display: inline-block;
   background-size: cover;
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(50, 50, 50, 1);
+  -moz-box-shadow:    5px 5px 5px 0px rgba(50, 50, 50, 1);
+  box-shadow:         5px 5px 5px 0px rgba(50, 50, 50, 1);
+  background-repeat:no-repeat;
+  background-position:center;
 }
 
 .thumbnail{
-  width: 75px;
-  height: 75px;
+  margin: 7px;
+  width: 95px;
+  height: 95px;
   border: 2px solid white;
   display: inline-block;
   background-size: cover;
+  -webkit-box-shadow: 5px 5px 5px 0px rgba(50, 50, 50, 1);
+  -moz-box-shadow:    5px 5px 5px 0px rgba(50, 50, 50, 1);
+  box-shadow:         5px 5px 5px 0px rgba(50, 50, 50, 1);
+  background-position:center;
 }
+
+.item{
+  position: relative;
+  float: left;
+  margin: 10px;
+  border: 3px white;
+  border-style: ridge;
+  border-radius: 5px;
+}
+
+.footer{
+  position: absolute;
+  bottom: -10px;
+}
+

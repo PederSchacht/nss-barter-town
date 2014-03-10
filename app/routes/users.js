@@ -8,6 +8,7 @@ exports.auth = function(req, res){
 
 exports.register = function(req, res){
   var user = new User(req.body);
+  user.addPhoto(req.files.photo.path);
   user.hashPassword(function(){
     user.insert(function(){
       if(user._id){
@@ -22,8 +23,6 @@ exports.register = function(req, res){
 exports.login = function(req, res){
   User.findByEmailAndPassword(req.body.email, req.body.password, function(user){
     if(user){
-      console.log('xxxxxxxxxxxxxxxxxxx');
-      console.log(req.session);
       req.session.regenerate(function(){
         req.session.userId = user._id.toString();
         req.session.save(function(){
@@ -50,3 +49,62 @@ exports.profile = function(req, res){
     res.render('users/profile', {title:user.email, user:user});
   });
 };
+
+exports.editProfile = function(req, res){
+  console.log('USERS EXPORTS EDIT PROFILE REQ SESSION: ', req.session);
+  var id = req.session.userId;
+  User.findById(id, function(user){
+    var u1 = new User(user);
+    if(req.body.userName){
+      u1.userName = req.body.userName;
+    }
+    if(req.body.email){
+      u1.email = req.body.email;
+    }
+    if(req.files.photo.originalFilename){
+      u1.addPhoto(req.files.photo.path, function(){
+        u1.update(function(err, result){
+          res.redirect('/');
+        });
+      });
+    } else {
+      u1.update(function(err, result){
+        res.redirect('/');
+      });
+    }
+  });
+};
+
+exports.email = function(req, res){
+  var key = process.env.MAILGUN;
+  var url = 'https://api:' + key + '@api.mailgun.net/v2/sandbox57340.mailgun.org/messages';
+  var post = request.post(url, function(err, response, body){
+    res.redirect('/');
+  });
+  var form = post.form();
+  form.append('from', 'myAss@yourMom.com');
+  form.append('to', req.body.to);
+  form.append('subject', req.body.subject);
+  form.append('text', req.body.body);
+  //form.append('html', req.body.body);
+  //form.append('attachment', fs.createReadStream(__dirname + '/../static/img/acadia.jpg'));
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -20,7 +20,7 @@ app.set('view engine', 'jade');
 app.use(initMongo.connect);
 app.use(initRoutes);
 app.use(express.logger(':remote-addr -> :method :url [:status]'));
-app.use(express.favicon());
+//app.use(express.favicon('./static/img/favicon.png'));
 app.use(express.static(__dirname + '/static'));
 app.use('/less', less(__dirname + '/less'));
 app.use(express.bodyParser());

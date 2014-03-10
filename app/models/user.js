@@ -10,13 +10,20 @@ var _ = require('lodash');
 
 function User(user){
   this._id = user._id;
-  this.name = user.name;
+  this.userName = user.userName;
   this.email = user.email;
   this.password = user.password;
   this.photo = user.photo;
   this.items = user.items || [];
   this.itemsWon = user.itemsWon || [];
 }
+
+User.prototype.update = function(fn){
+  var self = this;
+  users.update({_id: self._id}, self, function(err, result){
+    fn(result);
+  });
+};
 
 User.prototype.hashPassword = function(fn){
   var self = this;
@@ -40,18 +47,22 @@ User.prototype.insert = function(fn){
   });
 };
 
-User.prototype.addPhoto = function(oldname){
-  var dirname = this.name.replace(/\s/g,'').toLowerCase();
+User.prototype.addPhoto = function(oldname, fn){
+  var self = this;
+  var emailDir = this.email.replace('@', '-').toLowerCase();
+  var dirname = emailDir.replace('.', '-').toLowerCase();
+  //var dirname = this.name.replace(/\s/g,'').toLowerCase();
   var abspath = __dirname + '/../static';
   var relpath = '/img/' + dirname;
-  fs.mkdirSync(abspath + relpath);
-
   var extension = path.extname(oldname);
-  console.log(extension);
-  relpath += '/photo' + extension;
-  fs.renameSync(oldname, abspath + relpath);
 
-  this.photo = relpath;
+  fs.mkdir(abspath + relpath, function(){
+    relpath += '/photo' + extension;
+    fs.rename(oldname, abspath + relpath, function(err){
+      self.photo = relpath;
+      fn(err);
+    });
+  });
 };
 
 User.findById = function(id, fn){

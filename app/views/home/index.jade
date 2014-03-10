@@ -4,57 +4,65 @@ block content
   if !user
     .row
       .small-6.columns
-        form(action='/register', method='post')
+        form(action='/register', method='post', enctype='multipart/form-data')
           fieldset
             legend Register
             .row
               .small-12.columns
+                label Username
+                input(name='userName', type='text', autofocus=true, required=true)
+            .row
+              .small-12.columns
                 label Email
-                input(name='email', type='email')
+                input(name='email', type='text', required=true)
             .row
               .small-12.columns
                 label Password
-                input(name='password', type='password')
+                input(name='password', type='password', required=true)
             .row
-              .small-6.columns
-                button.tiny.radius Register
-
-     .small-6.columns
+              .small-12.columns
+                label User Photo
+                input(name='photo', type='file', required=true)
+            .row
+              .small-12.columns
+                button.small.radius Register
+      .small-6.columns
         form(action='/login', method='post')
           fieldset
             legend Login
             .row
               .small-12.columns
                 label Email
-                input(name='email', type='email', autofocus=true)
+                input(name='email', type='text', required=true)
             .row
               .small-12.columns
                 label Password
-                input(name='password', type='password')
+                input(name='password', type='password', required=true)
             .row
-              .small-6.columns
-                button.tiny.radius Login
+              .small-12.columns
+                button.small.radius.alert Login
   if user
     .row
       .small-12.columns
+        &nbsp;
         .row
-          .small-6.columns
+          .small-5.columns
             #user-info
-              .photo= user.photos
-              h1= user.email
+              .photo(style='background-image:url("' + user.photo + '")')
+              h2= user.email
             #user-items
-              h1 User Items
+              h2 My Items
               each item in userItems
                 .item
-              //    .thumbnail= item.photos
-                  a(href='/items/' + item._id)= item.name
-          .small-6.columns
+                  .thumbnail(style='background-image:url("' + item.photos +'")')
+                    .footer
+                      a(href='/items/' + item._id)= item.name
+          .small-5.columns
             #items-list
-              h1 Item List
+              h2 Avaliable Items
               each item in items
                 .item
                   .thumbnail(style='background-image:url("' + item.photos +'")')
-                  a(href='/items/' + item._id)= item.name
-
-
+                    .footer
+                      a(href='/items/' + item._id)= item.name
 

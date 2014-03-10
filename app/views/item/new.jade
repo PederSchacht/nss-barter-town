@@ -12,23 +12,23 @@ block content
               .row
                 .small-6.columns
                   label Year
-                  input(name='year', type='text', placeholder='2000')
+                  input(name='year', type='text', placeholder='2000', required=true)
                   label Cost
-                  input(name='cost', type='text', placeholder='$100')
+                  input(name='cost', type='text', placeholder='$100', required=true)
                 .small-6.columns
                   label Name
-                  input(name='name', type='text', placeholder='Mustang')
+                  input(name='name', type='text', placeholder='Mustang', required=true)
                   label Tags
-                  input(name='tags', type='text', placeholder='e.g. red, auto, muscle car')
+                  input(name='tags', type='text', placeholder='e.g. red, auto, muscle car', required=true)
               .row
                 .small-12.columns
                   label Description
-                  input(name='desc', type='text', placeholder='Super fast!')
+                  input(name='desc', type='text', placeholder='Super fast!', required=true)
               .row
-                .small-6.columns
+                .small-8.columns
                   label Photo
-                  input(type='file', name='photos')
-                .small-6.columns
+                  input(type='file', name='photos', required=true)
+                .small-4.columns
                   button.small.radius Submit
 
     .small-6.columns

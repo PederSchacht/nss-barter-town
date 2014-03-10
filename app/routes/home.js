@@ -7,11 +7,9 @@ var User = require('../models/user');
 
 exports.index = function(req, res){
   Item.findAll(function(items){
-    console.log('EXPORTS.INDEX FINDALL: ', req.session);
     var id = req.session.userId;
     User.findById(id, function(user){
       Item.findByUser(id, function(userItems){
-        console.log('exports index: ', user, items);
         res.render('home/index', {title: 'Barter Town', user:user, userItems:userItems, items:items});
       });
     });

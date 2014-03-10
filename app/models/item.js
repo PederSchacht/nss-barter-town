@@ -47,6 +47,7 @@ Item.prototype.addUser = function(id){
   this.userId = id;
 };
 
+/*
 Item.prototype.addBids = function(bids){
   //bids should be an array of objects
   //each object has an item id and a user id, both strings
@@ -55,6 +56,16 @@ Item.prototype.addBids = function(bids){
   _.each(bids, function(bid){
     self.bids.push(bid);
   });
+};
+*/
+
+Item.prototype.addBid = function(bid){
+  var self = this;
+  var tempBid = {};
+  tempBid.name = bid.name;
+  tempBid._id = bid._id;
+  tempBid.userId = bid.userId;
+  self.bids.push(tempBid);
 };
 
 Item.prototype.removeBidsByUser = function(id){
@@ -75,7 +86,6 @@ Item.prototype.addPhoto = function(oldname, fn){
   var pathImgBarter = absolutePath + '/img/' + 'barter/';
   var pathImgBarterItem = pathImgBarter + itemName + '/';
   var pathImgBarterItemYear = pathImgBarterItem + year + '/';
-  
   var relativePath = '/img/' + 'barter/' + itemName + '/' + year + '/' + this.photos.length + extension;
 
   fs.mkdir(pathImgBarter, function(){
