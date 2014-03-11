@@ -2,20 +2,30 @@ extends ../shared/template
 
 block content
   each item in items
-    .item
+    .item#results
       .row
         .small-12.columns
-            .small-6.columns
-              h1= item.name
-              .photo(style='background-image:url("' + item.photos +'")')
-              table
-                thead
-                  th Year
-                  th Cost
-                  th Info
-                  th Tags
-                tr
-                  td= item.year
-                  td= item.cost
-                  td= item.desc
-                  td= item.tags
+          .small-6.columns
+            h1= item.name
+            .photo(style='background-image:url("' + item.photos +'")')
+            table
+              thead
+                th Year
+                th Cost
+                th Info
+                th Tags
+              tr
+                td= item.year
+                td= item.cost
+                td= item.desc
+                td= item.tags
+
+  .row
+    .small-6.columns
+      button.alert.radius.small(name='back') Back
+    .small-6.columns
+      form(action='/filter', method='post')
+        input(type='hidden', name='type', value= kind)
+        input(type='hidden', name='which', value= which)
+        input(type='hidden', name='page', value= 1)
+        button.alert.radius.small(name='more') Show More

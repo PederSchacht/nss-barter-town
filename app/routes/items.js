@@ -24,9 +24,10 @@ exports.create = function(req, res){
 exports.update = function(req, res){
   var item = new Item(req.body);
   item._id = req.body.id;
+  item.photos = req.body.origPhotos;
   item.update(function(){
-    //res.redirect('/items/'+req.body.id);
-    res.redirect('/');
+    res.redirect('/items/'+req.body.id);
+    //res.redirect('/');
   });
 };
 
@@ -62,25 +63,26 @@ exports.index = function(req, res){
 exports.filter = function(req, res){
   var type = req.body.type;
   var input = req.body.which.replace('%20', ' ');
+  if(!req.body.page){var page=0;}
   switch(type){
     case 'tag':
       Item.findByTag(input, function(items){
-        res.render('item/show', {title:'Search Results', items:items});
+        res.render('item/show', {page:page, kind:'tag', which:input, title:'Search Results', items:items});
       });
       break;
     case 'year':
-      Item.findByYear(input, function(items){
-        res.render('item/show', {title:'Search Results', items:items});
+      Item.findByYear(input, page, function(items){
+        res.render('item/show', {page:page, kind:'year', which:input,  title:'Search Results', items:items});
       });
       break;
     case 'user':
       Item.findByUser(input, function(items){
-        res.render('item/show', {title:'Search Results', items:items});
+        res.render('item/show', {page:page, kind:'user', which:input, title:'Search Results', items:items});
       });
       break;
     case 'name':
-      Item.findByName(input, function(items){
-        res.render('item/show', {title:'Search Results', items:items});
+      Item.findByName(input, page, function(items){
+        res.render('item/show', {page:page, kind:'name', which:input, title:'Search Results', items:items});
       });
       break;
     default:

@@ -30,7 +30,7 @@ function load(app, fn){
   app.get('/items/:id', d, items.showItem);
   app.get('/items', d, items.index);
   app.post('/items', d, items.create);
-  app.put('/items', d, items.update);
+  app.post('/update', d, items.update);
 
   app.post('/place', d, items.placeBid);
   app.post('/win', d, items.winBid);

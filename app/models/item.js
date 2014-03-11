@@ -154,14 +154,14 @@ Item.findByTag = function(tag, fn){
   });
 };
 
-Item.findByYear = function(year, fn){
-  items.find({year:year}).toArray(function(err, records){
+Item.findByYear = function(year, page, fn){
+  items.find({year:year}).skip(5*page).limit(5).toArray(function(err, records){
     fn(records);
   });
 };
 
-Item.findByName = function(name, fn){
-  items.find({name:name}).toArray(function(err, records){
+Item.findByName = function(name, page, fn){
+  items.find({name:name}).skip(5*page).limit(5).toArray(function(err, records){
     fn(records);
   });
 };
