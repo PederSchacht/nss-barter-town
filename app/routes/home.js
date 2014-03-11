@@ -1,7 +1,7 @@
 'use strict';
 
 var request = require('request');
-var fs = require('fs');
+//var fs = require('fs');
 var Item = require('../models/item');
 var User = require('../models/user');
 
@@ -20,6 +20,25 @@ exports.newItem = function(req, res){
   res.render('item/new', {title: 'New Item'});
 };
 
+exports.registrationEmail = function(req, fn){
+  console.log('HOME REGISTRATION EMAIL CALLED: ', req.body);
+  var key = process.env.MAILGUN;
+  var url = 'https://api:' + key + '@api.mailgun.net/v2/sandbox7244.mailgun.org/messages';
+  var post = request.post(url, function(err, response, body){
+    //res.redirect('/');
+  });
+  var form = post.form();
+  form.append('from', 'theSheriff@bartertown.com');
+  form.append('to', req.body.email);
+  form.append('subject', 'Welcome to Bartertown.');
+  form.append('text', 'Hi, thanks for registering with Bartertown. You rock!');
+  //form.append('html', req.body.body);
+  //form.append('attachment', fs.createReadStream(__dirname + '/../static/img/money.jpg'));
+  //form.append('attachment', fs.createReadStream(__dirname + '/../static/img/startup.jpg'));
+  fn();
+};
+
+/*
 exports.email = function(req, res){
   var key = process.env.MAILGUN;
   var url = 'https://api:' + key + '@api.mailgun.net/v2/sandbox7244.mailgun.org/messages';
@@ -35,4 +54,4 @@ exports.email = function(req, res){
   form.append('attachment', fs.createReadStream(__dirname + '/../static/img/money.jpg'));
   form.append('attachment', fs.createReadStream(__dirname + '/../static/img/startup.jpg'));
 };
-
+*/

@@ -35,7 +35,7 @@ function load(app, fn){
   app.post('/place', d, items.placeBid);
   app.post('/win', d, items.winBid);
   app.post('/filter', d, items.filter);
-  app.post('/users-email', d, users.email);
+  //app.post('/users-email', d, users.email);
   //app.post('/items-email', d, items.email);
 
   console.log('Routes Loaded');

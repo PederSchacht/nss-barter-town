@@ -23,8 +23,10 @@ exports.create = function(req, res){
 
 exports.update = function(req, res){
   var item = new Item(req.body);
+  item._id = req.body.id;
   item.update(function(){
-    res.send({item:item});
+    //res.redirect('/items/'+req.body.id);
+    res.redirect('/');
   });
 };
 
@@ -49,28 +51,36 @@ exports.index = function(req, res){
   });
 };
 
+/*
+exports.index = function(req, res){
+  Item.findAll(function(items){
+    res.send({items:items});
+  });
+};
+*/
+
 exports.filter = function(req, res){
   var type = req.body.type;
   var input = req.body.which.replace('%20', ' ');
   switch(type){
     case 'tag':
       Item.findByTag(input, function(items){
-        res.send({items:items});
+        res.render('item/show', {title:'Search Results', items:items});
       });
       break;
     case 'year':
       Item.findByYear(input, function(items){
-        res.send({items:items});
+        res.render('item/show', {title:'Search Results', items:items});
       });
       break;
     case 'user':
       Item.findByUser(input, function(items){
-        res.send({items:items});
+        res.render('item/show', {title:'Search Results', items:items});
       });
       break;
     case 'name':
       Item.findByName(input, function(items){
-        res.send({items:items});
+        res.render('item/show', {title:'Search Results', items:items});
       });
       break;
     default:

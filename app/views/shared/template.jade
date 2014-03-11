@@ -21,17 +21,17 @@ html(class='no-js', lang='en')
         ul.left
           li.has-form
             .row.collapse
-              form(action='/filter', method='get')
-              .large-3.small-3.columns
-                 select.button.prefix.tiny#selectSearch
-                   option Search by:
-                   option(value='tag') Tag
-                   option(value='year') Year
-                   option(value='name') Name
-              .large-6.small-6.columns
-                input(name='which', type='text', placeholder='Find Item')
-              .large-3.small-3.columns
-                a(href='#').button.postfix.tiny#searchButton Search
+              form(action='/filter', method='post')
+                .large-3.small-3.columns
+                  select(name='type').button.prefix.tiny#selectSearch
+                    option Search by:
+                    option(value='tag') Tag
+                    option(value='year') Year
+                    option(value='name') Name
+                .large-6.small-6.columns
+                  input(name='which', type='text', placeholder='Find Item')
+                .large-3.small-3.columns
+                  button.button.postfix.tiny#searchButton Search
         ul.right
           if user
             li.active: a(href='/new').button.tiny.btn Add New Item

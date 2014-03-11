@@ -1,6 +1,7 @@
 'use strict';
 
 var User = require('../models/user');
+var home = require('./home');
 //var request = require('request');
 
 exports.auth = function(req, res){
@@ -13,7 +14,9 @@ exports.register = function(req, res){
     user.hashPassword(function(){
       user.insert(function(){
         if(user._id){
-          res.redirect('/');
+          home.registrationEmail(req, function(){
+            res.redirect('/');
+          });
         }else{
           res.render('users/auth', {title: 'User Authentication'});
         }

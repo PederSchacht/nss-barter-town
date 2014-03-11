@@ -66,7 +66,7 @@ User.prototype.addPhoto = function(oldname, fn){
 };
 
 User.findById = function(id, fn){
-  var _id = Mongo.ObjectID(id.toString());
+  var _id = Mongo.ObjectID(id);
 
   users.findOne({_id:_id}, function(err, record){
     fn(record);

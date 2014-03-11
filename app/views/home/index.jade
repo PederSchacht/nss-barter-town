@@ -49,16 +49,16 @@ block content
           .small-5.columns
             #user-info
               .photo(style='background-image:url("' + user.photo + '")')
-              h2= user.email
+              h2= user.userName
             #user-items
-              h2 My Items
+              h3 My Items
               each item in userItems
                 .item
                   .thumbnail(style='background-image:url("' + item.photos +'")')
                   .footer: a(href='/items/' + item._id)= item.name
           .small-5.columns
             #items-list
-              h2 Avaliable Items
+              h3 Avaliable Items
               each item in items
                 .item
                   .thumbnail(style='background-image:url("' + item.photos +'")')

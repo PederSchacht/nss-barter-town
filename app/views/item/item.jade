@@ -37,6 +37,24 @@ block content
                           input(name='origItem', value=item._id, type='hidden')
                           input(name='origPhotos', value=item.photos, type='hidden')
                           button Pick Winner
+            #itemUpdate
+              form(action='/items', method='post', enctype='multipart/form-data')
+                fieldset
+                  legend Edit item
+                  .row
+                    .small-12.columns
+                      .small-6.columns
+                        input(type='hidden', name='id', value=item._id)
+                        input(type='hidden', name='_method', value ='put')
+                        input(name='name', value=item.name, type='text')
+                        input(name='year', value=item.year, type='text')
+                        input(name='cost', value=item.cost, type='text')
+                        input(name='photos', value=item.photos, type='file')
+                      .small-6.columns
+                        input(name='tags', value=item.tags, type='text')
+                        input(name='desc', value=item.desc, type='text')
+                        button Submit edit
+
           else
             #placeBid
               h1 Place Bid
