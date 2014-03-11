@@ -77,11 +77,12 @@ exports.editProfile = function(req, res){
 };
 
 exports.email = function(req, res){
+  console.log('HEY THIS IS EXPORTS EMAIL. REQ: ', req);
   var key = process.env.MAILGUN;
   var id = req.session.userId;
   var url = 'https://api:' + key + '@api.mailgun.net/v2/sandbox57340.mailgun.org/messages';
   var post = request.post(url, function(err, response, body){
-    res.redirect('/');
+    res.send('/');
   });
   var form = post.form();
   User.findById(id, function(user){

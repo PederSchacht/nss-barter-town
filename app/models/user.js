@@ -90,7 +90,7 @@ User.findByEmailAndPassword = function(email, password, fn){
 };
 
 User.prototype.addItem = function(item){
-  this.items.push(item);
+  this.items.unshift(item);
 };
 
 User.prototype.removeItem = function(item){

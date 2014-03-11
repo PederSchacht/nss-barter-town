@@ -9,9 +9,7 @@ exports.index = function(req, res){
   Item.findAll(function(items){
     var id = req.session.userId;
     User.findById(id, function(user){
-      Item.findByUser(id, function(userItems){
-        res.render('home/index', {title: 'Barter Town', user:user, userItems:userItems, items:items});
-      });
+      res.render('home/index', {title: 'Barter Town', user:user, userItems:user.items, items:items});
     });
   });
 };
